@@ -50,7 +50,9 @@ void MainWindow::on_actionUpload_triggered()
     Mat image = imread(imgPath.toStdString());
     cvtColor(image, image,COLOR_BGR2RGB);
     img.setImage(image);
+    cv::resize(image, image, cv::Size(500, 500));
     showImg(image, ui->originalImg, QImage::Format_RGB888, ui->originalImg->width(), ui->originalImg->height());
+     ui->outputImg->clear();
 
 
 }
