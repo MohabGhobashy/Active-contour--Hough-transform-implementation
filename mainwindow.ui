@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -133,7 +139,7 @@ QTabBar::tab:right:selected {
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QComboBox" name="comboBox">
+        <widget class="QComboBox" name="typeComboBox">
          <property name="styleSheet">
           <string notr="true">QComboBox {
     border: 1px solid gray;
@@ -227,7 +233,7 @@ QComboBox QAbstractItemView {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="submitBtn">
          <property name="styleSheet">
           <string notr="true">QPushButton {
     border: 2px solid #8f8f91;
@@ -272,9 +278,9 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>40</x>
+        <x>70</x>
         <y>50</y>
-        <width>731</width>
+        <width>651</width>
         <height>291</height>
        </rect>
       </property>
@@ -283,6 +289,11 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="originalImg">
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+    border: 1px solid #000000; 
+}</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -300,7 +311,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>40</width>
+           <width>60</width>
            <height>20</height>
           </size>
          </property>
@@ -309,7 +320,12 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QLabel" name="filteredImg">
+          <widget class="QLabel" name="outputImg">
+           <property name="styleSheet">
+            <string notr="true">QLabel {
+    border: 1px solid #000000; 
+}</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -333,7 +349,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
