@@ -23,6 +23,8 @@ private slots:
     void on_actionUpload_triggered();
     void on_submitBtn_clicked();
 
+    void on_submitBtn_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

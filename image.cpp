@@ -2,25 +2,25 @@
 using namespace std;
 using namespace cv;
 
-Image::Image(){}
+Image1::Image1(){}
 
-void Image::setImage(Mat& img)
+void Image1::setImage(Mat& img)
 {
     this->originalImg = img.clone();
     this->outputImage = img.clone();
 
 }
 
-void Image::reset(){
+void Image1::reset(){
     this->outputImage = this->originalImg.clone();
 
 }
 
-Mat& Image::getOutputImg(){
+Mat& Image1::getOutputImg(){
     return this->outputImage;
 }
 
-Mat& Image::getOriginalImage(){
+Mat& Image1::getOriginalImage(){
     return this->originalImg;
 }
 
