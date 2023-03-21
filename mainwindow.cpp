@@ -37,15 +37,9 @@ void MainWindow::on_actionUpload_triggered()
 
     Mat image = imread(imgPath.toStdString());
     cvtColor(image, image,COLOR_BGR2RGB);
-    showImg(image, ui->originalImg, QImage::Format_RGB888, this->origWidth, this->origHeight);
-
-
 }
 void MainWindow::showImg(Mat& img, QLabel* imgLbl, enum QImage::Format imgFormat, int width , int hieght)
 {
     QImage image2((uchar*)img.data, img.cols, img.rows, imgFormat);
     QPixmap pix = QPixmap::fromImage(image2);
-    int width_img = ui->originalImg->width();
-    int height_img = ui->originalImg->height();
-    imgLbl->setPixmap(pix.scaled(width_img,height_img,Qt::KeepAspectRatio));
 }
