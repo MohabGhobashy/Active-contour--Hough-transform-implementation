@@ -80,6 +80,11 @@ void MainWindow::on_submitBtn_clicked()
         circleDetection(img1.getOutputImg());
         showImg(img1.getOutputImg(), ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
+
+        string path = imgPath.toStdString();
+        Mat image =imread(path, IMREAD_GRAYSCALE);
+        Mat result = houghLine(image);
+        showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
 }
 
 
