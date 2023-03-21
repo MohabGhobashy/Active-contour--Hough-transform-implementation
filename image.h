@@ -9,13 +9,13 @@ using namespace std;
 using namespace cv;
 //#include "QTCV.h"
 
-class Image
+class Image1
 {
 private:
     Mat originalImg;
     Mat outputImage;
 public:
-    Image();
+    Image1();
     void setImage(Mat& img);
     Mat& getOutputImg();
     Mat& getOriginalImage();
