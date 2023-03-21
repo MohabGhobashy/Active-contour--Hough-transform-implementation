@@ -87,12 +87,13 @@ void MainWindow::on_submitBtn_2_clicked()
 {
     string path = imgPath.toStdString();
     Image original_image = Image(path);
-    int points = 80;
+    int points = 150;
     Size sz = original_image.mat.size();
-    int x_cooridinates[80];
-    int y_cooridinates[80];
-    circle_contour(Point(sz.width / 2, sz.height / 2), 150, points, x_cooridinates, y_cooridinates);
-    // greedy_contour(original_image, 100, 2, 0.9, 20, x_cooridinates, y_cooridinates, points, 5);
-    greedy_contour(original_image, 50, 2.5, 0.9, 20, x_cooridinates, y_cooridinates, points, 11, true);
+    int x_cooridinates[points];
+    int y_cooridinates[points];
+    circle_contour(Point(sz.width / 2, sz.height / 2), 180, points, x_cooridinates, y_cooridinates);
+    Mat output=greedy_contour(original_image, 10, 1, 1.5, 20, x_cooridinates, y_cooridinates, points, 7, true);
+    showImg(output, ui->outputImg_2, QImage::Format_RGB888, ui->outputImg_2->width(), ui->outputImg_2->height());
+
 }
 

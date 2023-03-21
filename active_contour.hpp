@@ -13,6 +13,5 @@ void draw_contour(cv::Mat Image, int numberOfPoints, int *x_cooridinates, int *y
 double contour_area(int numberOfPoints, int *x_cooridinates, int *y_cooridinates);
 double contour_perimeter(int *x_points, int *y_points, int points_n);
 cvector<cvector<int>> window_neighbours(int size);
-void greedy_contour(img::Image source, int iterations, int alpha, int beta, int gamma, int *x_points, int *y_points, int points_n, int window_size,bool plot);
-
+cv::Mat greedy_contour(img::Image source, int iterations ,float alpha, float beta, float gamma,int* x_points, int* y_points, int points_n, int window_size, bool plot);
 #endif
