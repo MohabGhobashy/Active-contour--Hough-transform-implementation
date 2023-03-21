@@ -1,8 +1,63 @@
 #include "shapesdetection.h"
 #include <thread>
 
+/////////////////////////////////////////////// Hough Line /////////////////////////////
+cv::Mat houghLine(cv::Mat Orignalimage) {
+    // Resize
+    resize(Orignalimage, Orignalimage, cv::Size(500, 500));
+    // Canny
+    Mat Cannyimage;
+    Canny(Orignalimage, Cannyimage, 130, 150);
+    // Define range of angles to scan
+    std::vector<double> angles;
+    for (int i = -90; i <= 90; i++) {
+        angles.push_back(i * CV_PI / 180.0);
+    }
 
+    // Create accumulator array
+    int max_dist = cvRound(sqrt(pow(Cannyimage.rows, 2) + pow(Cannyimage.cols, 2)));
+    cv::Mat accumulator = cv::Mat::zeros(max_dist * 2 + 1, angles.size(), CV_32SC1);
 
+    // Loop through image pixels
+    for (int y = 0; y < Cannyimage.rows; y++) {
+        for (int x = 0; x < Cannyimage.cols; x++) {
+            if (Cannyimage.at<uchar>(y, x) > 0) {
+                // Calculate rho for each angle
+                for (int a = 0; a < angles.size(); a++) {
+                    int rho = cvRound(x * cos(angles[a]) + y * sin(angles[a])) + max_dist;
+                    accumulator.at<int>(rho, a)++;
+                }
+            }
+        }
+    }
+
+    // Find local maxima in accumulator
+    std::vector<cv::Vec2i> lines;
+    int threshold = 170;
+    for (int r = 0; r < accumulator.rows; r++) {
+        for (int a = 0; a < accumulator.cols; a++) {
+            if (accumulator.at<int>(r, a) > threshold) {
+                lines.push_back(cv::Vec2i(r, a));
+            }
+        }
+    }
+
+    // Draw lines on image
+    cv::Mat output = Orignalimage.clone();
+    cv::cvtColor(output, output, cv::COLOR_GRAY2BGR);
+    for (int i = 0; i < lines.size(); i++) {
+        float rho = lines[i][0] - max_dist;
+        float theta = angles[lines[i][1]];
+        double a = cos(theta), b = sin(theta);
+        double x0 = a * rho, y0 = b * rho;
+        cv::Point pt1(cvRound(x0 + 1000 * (-b)), cvRound(y0 + 1000 * (a)));
+        cv::Point pt2(cvRound(x0 - 1000 * (-b)), cvRound(y0 - 1000 * (a)));
+        cv::line(output, pt1, pt2, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
+    }
+
+    return output;
+}
+/////////////////////////////////////// Hough Cirlce ////////////////////////////////////////////////////////////
 void circleDetection(Mat& img,int min_radius, int max_radius , int canny_threshold , int accumulator_threshold){
 
     cv::resize(img, img, cv::Size(500, 500));
