@@ -16,12 +16,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     void showImg(Mat& img, QLabel* imgLbl, enum QImage::Format imgormat, int width, int hieght);
-    int origWidth, origHeight;
 
     ~MainWindow();
 private slots:
 
     void on_actionUpload_triggered();
+    void on_submitBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
