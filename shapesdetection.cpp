@@ -1,13 +1,17 @@
 #include "shapesdetection.h"
 #include <thread>
+#include <QDebug>
+#include <cmath>
+
 
 /////////////////////////////////////////////// Hough Line /////////////////////////////
 cv::Mat houghLine(cv::Mat Orignalimage) {
     // Resize
-    resize(Orignalimage, Orignalimage, cv::Size(500, 500));
+    resize(Orignalimage, Orignalimage, cv::Size(500, round(500*Orignalimage.rows/Orignalimage.cols)));
     // Canny
     Mat Cannyimage;
-    Canny(Orignalimage, Cannyimage, 130, 150);
+    cvtColor(Orignalimage, Cannyimage, COLOR_BGR2GRAY);
+    Canny(Cannyimage, Cannyimage, 130, 150);
     // Define range of angles to scan
     std::vector<double> angles;
     for (int i = -90; i <= 90; i++) {
@@ -43,8 +47,8 @@ cv::Mat houghLine(cv::Mat Orignalimage) {
     }
 
     // Draw lines on image
-    cv::Mat output = Orignalimage.clone();
-    cv::cvtColor(output, output, cv::COLOR_GRAY2BGR);
+//    cv::Mat output = Orignalimage.clone();
+//    cv::cvtColor(output, output, cv::COLOR_GRAY2BGR);
     for (int i = 0; i < lines.size(); i++) {
         float rho = lines[i][0] - max_dist;
         float theta = angles[lines[i][1]];
@@ -52,18 +56,19 @@ cv::Mat houghLine(cv::Mat Orignalimage) {
         double x0 = a * rho, y0 = b * rho;
         cv::Point pt1(cvRound(x0 + 1000 * (-b)), cvRound(y0 + 1000 * (a)));
         cv::Point pt2(cvRound(x0 - 1000 * (-b)), cvRound(y0 - 1000 * (a)));
-        cv::line(output, pt1, pt2, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
+        cv::line(Orignalimage, pt1, pt2, cv::Scalar(0, 0, 255), 1, cv::LINE_AA);
     }
 
-    return output;
+    return Orignalimage;
 }
 /////////////////////////////////////// Hough Cirlce ////////////////////////////////////////////////////////////
 void circleDetection(Mat& img,int min_radius, int max_radius , int canny_threshold , int accumulator_threshold){
 
-    cv::resize(img, img, cv::Size(500, 500));
+    cv::resize(img, img, cv::Size(500, round(500*img.rows/img.cols)));
     Mat edgy;
     cvtColor(img, edgy, COLOR_BGR2GRAY);
     Canny(edgy, edgy, canny_threshold, canny_threshold * 2);
+
     int num_angles = 360;
     float angle_step = 2*M_PI / num_angles;
     vector<float> cos_table;
@@ -78,12 +83,12 @@ void circleDetection(Mat& img,int min_radius, int max_radius , int canny_thresho
     int cols = edgy.cols;
     vector<vector<vector<int>>> accumulator(rows, vector<vector<int>>(cols, vector<int>(max_radius - min_radius + 1)));
     vector<std::thread> vecOfThreads;
-    int startY = 0, endY = 25;
+    int step = ceil(rows/20), startY = 0, endY = step;
     for(int i=0; i<20; i++){
         vecOfThreads.push_back(std::thread(setAccumulator, std::ref(accumulator), std::ref(edgy), std::ref(cos_table),
                                             std::ref(sin_table), min_radius, max_radius, startY, endY));
-        startY += 25;
-        endY += 25;
+        startY += step;
+        endY += step;
     }
 
     for (std::thread & th : vecOfThreads)
@@ -97,11 +102,11 @@ void circleDetection(Mat& img,int min_radius, int max_radius , int canny_thresho
      // Draw circles
 
 
-    startY = 0, endY = 50;
+    step = ceil(rows/10), startY = 0, endY = step;
     for(int i=0; i<10; i++){
         vecOfThreads.push_back(std::thread(drawCirles, std::ref(accumulator), std::ref(img), min_radius, max_radius, startY, endY, accumulator_threshold));
-        startY += 50;
-        endY += 50;
+        startY += step;
+        endY += step;
     }
     for (std::thread & th : vecOfThreads)
     {
@@ -140,8 +145,10 @@ void drawCirles(vector<vector<vector<int>>>& accumulator, Mat& img, int min_radi
     for (int y = startY; y < endY; y++) {
         for (int x = 0; x < cols; x++) {
             for (int r = min_radius; r <= max_radius; r++) {
-                if (accumulator[y][x][r - min_radius] > accumulator_threshold) {
+                if (accumulator[y][x][r - min_radius] > accumulator_threshold){
+                    qDebug()<<"gg";
                     circle(img, Point(x, y), r, Scalar(0, 255, 0), 2);
+                    qDebug()<<"ez";
                 }
             }
         }

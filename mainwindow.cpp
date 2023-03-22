@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include <iostream>
 #include "opencv2/imgproc.hpp"
+#include <cmath>
 
 
 
@@ -46,7 +47,9 @@ void MainWindow::showImg(Mat& img, QLabel* imgLbl, enum QImage::Format imgFormat
 {
     QImage image((uchar*)img.data, img.cols, img.rows, imgFormat);
     QPixmap pix = QPixmap::fromImage(image);
-    imgLbl->setPixmap(pix.scaled(width, hieght,Qt::KeepAspectRatio));
+    imgLbl->resize(img.rows, img.cols);
+    imgLbl->setPixmap(pix.scaled(width, hieght, Qt::KeepAspectRatio));
+//    imgLbl->setScaledContents(true);
 }
 void MainWindow::on_actionUpload_triggered()
 {
@@ -63,11 +66,11 @@ void MainWindow::on_actionUpload_triggered()
     Mat image = imread(imgPath.toStdString());
     cvtColor(image, image,COLOR_BGR2RGB);
     img1.setImage(image);
-    cv::resize(image, image, cv::Size(500, 500));
+    cv::resize(image, image, cv::Size(500, round(500*image.rows/image.cols)));
     showImg(image, ui->originalImg, QImage::Format_RGB888, ui->originalImg->width(), ui->originalImg->height());
      ui->outputImg->clear();
     // tab 2
-     showImg(image, ui->originalImg_2, QImage::Format_RGB888, ui->originalImg_2->width(), ui->originalImg_2->height());
+     showImg(image, ui->originalImg_2, QImage::Format_RGB888, ui->originalImg->width(), ui->originalImg->height());
 
 
 
@@ -77,14 +80,19 @@ void MainWindow::on_actionUpload_triggered()
 void MainWindow::on_submitBtn_clicked()
 {
     if(ui->typeComboBox->currentText() == "circle"){
+        img1.reset();
         circleDetection(img1.getOutputImg());
         showImg(img1.getOutputImg(), ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
 
+    if(ui->typeComboBox->currentText() == "line"){
         string path = imgPath.toStdString();
-        Mat image =imread(path, IMREAD_GRAYSCALE);
-        Mat result = houghLine(image);
+        img1.reset();
+
+//        Mat image =imread(path, IMREAD_GRAYSCALE);
+        Mat result = houghLine(img1.getOutputImg());
         showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
+    }
 }
 
 
