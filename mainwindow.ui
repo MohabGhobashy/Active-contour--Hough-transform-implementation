@@ -122,7 +122,7 @@ QTabBar::tab:right:selected {
 </string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -199,7 +199,7 @@ QComboBox QAbstractItemView {
          </property>
          <item>
           <property name="text">
-           <string>line </string>
+           <string>line</string>
           </property>
          </item>
          <item>
@@ -278,10 +278,10 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>70</x>
-        <y>50</y>
-        <width>651</width>
-        <height>291</height>
+        <x>40</x>
+        <y>40</y>
+        <width>711</width>
+        <height>321</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_25">
@@ -291,7 +291,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
           <widget class="QLabel" name="originalImg">
            <property name="styleSheet">
             <string notr="true">QLabel {
-    border: 1px solid #000000; 
+    border: 1px solid #000000; qproperty-alignment: AlignCenter;
 }</string>
            </property>
            <property name="text">
@@ -323,7 +323,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
           <widget class="QLabel" name="outputImg">
            <property name="styleSheet">
             <string notr="true">QLabel {
-    border: 1px solid #000000; 
+    border: 1px solid #000000; qproperty-alignment: AlignCenter;
 }</string>
            </property>
            <property name="text">
@@ -462,7 +462,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
