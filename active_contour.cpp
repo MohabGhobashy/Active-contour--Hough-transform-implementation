@@ -1,36 +1,33 @@
 #include <opencv2/opencv.hpp>
 #include "active_contour.hpp"
 
-void circle_contour(cv::Point center, double radius, int numberOfPoints, int *x_cooridinates, int *y_cooridinates)
+void circle_contour(cv::Point center, double radius, int numberOfPoints, int *x_coordinates, int *y_coordinates)
 {
-    std::vector<double> mag = {radius};
-    double current_angle = 0;
-    double resolution = 360 / (double)numberOfPoints;
-    std::cout << resolution << std::endl;
+    // Compute the angular resolution of the contour
+    double resolution = 2 * CV_PI / numberOfPoints;
+
+    // Generate the contour points
     for (int i = 0; i < numberOfPoints; i++)
     {
-        std::vector<double> angle = {current_angle};
-        std::vector<double> x = {};
-        std::vector<double> y = {};
-        cv::polarToCart(mag, angle, x, y, true);
-        x_cooridinates[i] = (int)(x[0] + center.x);
-        y_cooridinates[i] = (int)(y[0] + center.y);
-        current_angle += resolution;
+        // Compute the angle of the current contour point
+        double angle = i * resolution;
+
+        // Compute the x and y coordinates of the current contour point
+        double x = center.x + radius * std::cos(angle);
+        double y = center.y - radius * std::sin(angle);
+
+        // Store the coordinates in the output arrays
+        x_coordinates[i] = (int)std::round(x);
+        y_coordinates[i] = (int)std::round(y);
     }
 }
-
-void draw_contour(cv::Mat Image, int numberOfPoints, int *x_cooridinates, int *y_cooridinates)
+void draw_contour(cv::Mat Image, int numberOfPoints, int *x_coordinates, int *y_coordinates)
 {
     int next;
     for (int i = 0; i < numberOfPoints; i++)
-
     {
-        next = i + 1;
-        if (i == numberOfPoints - 1)
-        {
-            next = 0;
-        }
-        line(Image, cv::Point(x_cooridinates[i], y_cooridinates[i]), cv::Point(x_cooridinates[next], y_cooridinates[next]), cv::Scalar(255, 0, 0), 2);
+        next = (i + 1) % numberOfPoints;
+        line(Image, cv::Point(y_coordinates[i], x_coordinates[i]), cv::Point(y_coordinates[next], x_coordinates[next]), cv::Scalar(255, 0, 0), 2);
     }
 }
 
@@ -67,30 +64,50 @@ double contour_perimeter(int *x_points, int *y_points, int points_n)
 double internal_energy(int *x_points, int *y_points, int points_n, double alpha, double beta)
 {
     double curv_sum = 0;
-    double second_drev = 0;
     double cont_sum = 0;
-    double first_driv = 0;
-    double avg_dist = contour_perimeter(x_points, y_points, points_n)/points_n;
+    double avg_dist = contour_perimeter(x_points, y_points, points_n) / points_n;
+
+    // Compute the average angle between adjacent line segments
+    double avg_angle = 0;
+    for (int i = 0; i < points_n; i++) {
+        int next_point = (i + 1) % points_n;
+        double dx = x_points[next_point] - x_points[i];
+        double dy = y_points[next_point] - y_points[i];
+        double angle = std::atan2(dy, dx);
+        if (angle < 0) angle += 2 * CV_PI;
+        avg_angle += angle;
+    }
+    avg_angle /= points_n;
+
+    // Compute the energy due to contour smoothness and curvature
     for (int i = 0; i < points_n; i++)
     {
-        int next_point = i + 1;
-        int prev_point = i - 1;
-        if (i == points_n - 1)
-        {
-            next_point = 0;
-        }
-        else if (i == 0)
-        {
-            prev_point = points_n - 1;
-        }
-        first_driv = points_distance(x_points[i], y_points[i], x_points[next_point], y_points[next_point]);
-        cont_sum += pow((first_driv - avg_dist), 2);
-        second_drev = pow((x_points[next_point] - 2 * x_points[i] + x_points[prev_point]), 2) + pow((y_points[next_point] - 2 * y_points[i] + y_points[prev_point]), 2);
-        curv_sum += second_drev;
+        int next_point = (i + 1) % points_n;
+        int prev_point = (i + points_n - 1) % points_n;
+
+        // Compute the distance between adjacent contour points
+        double dist = points_distance(x_points[i], y_points[i], x_points[next_point], y_points[next_point]);
+
+        // Compute the deviation from the desired distance
+        double cont_dev = dist - avg_dist;
+        cont_sum += cont_dev * cont_dev;
+
+        // Compute the angle deviation between adjacent line segments
+        double dx1 = x_points[i] - x_points[prev_point];
+        double dy1 = y_points[i] - y_points[prev_point];
+        double dx2 = x_points[next_point] - x_points[i];
+        double dy2 = y_points[next_point] - y_points[i];
+        double angle1 = std::atan2(dy1, dx1);
+        double angle2 = std::atan2(dy2, dx2);
+        if (angle1 < 0) angle1 += 2 * CV_PI;
+        if (angle2 < 0) angle2 += 2 * CV_PI;
+        double angle_dev = std::abs(angle1 - angle2);
+        if (angle_dev > CV_PI) angle_dev = 2 * CV_PI - angle_dev;
+        curv_sum += angle_dev * angle_dev;
     }
+
     double energy = alpha * cont_sum + beta * curv_sum;
-    return energy;
-}
+    return energy;}
 
 img::Image external_energy(img::Image source)
 {
@@ -106,13 +123,12 @@ img::Image external_energy(img::Image source)
     // return gray;
 }
 
-cv::Mat greedy_contour(img::Image source, int iterations ,float alpha, float beta, float gamma,int* x_points, int* y_points, int points_n, int window_size, bool plot){
+cv::Mat greedy_contour(img::Image source, int iterations, float alpha, float beta, float gamma, int* x_points, int* y_points, int points_n, int window_size, bool plot) {
     img::Image sobel_energy = external_energy(source);
     cvector<cvector<int>> window = window_neighbours(window_size);
     int current_x[180];
     int current_y[180];
-    std::copy(x_points,x_points + points_n,current_x);
-    std::copy(y_points,y_points + points_n,current_y);
+
     cv::Mat plot_img;
     int point_energy;
     int min_energy;
@@ -121,50 +137,57 @@ cv::Mat greedy_contour(img::Image source, int iterations ,float alpha, float bet
     int iteration = 0;
     bool loob = true;
     int threshold = 5;
-    int neighbours_size = pow(window_size,2);
-    while(loob){
-        for(int i=0;i<points_n;i++){
-            for(int j=0;j<neighbours_size;j++){
+    int neighbours_size = pow(window_size, 2);
+
+    while (loob) {
+        movements = 0; // Reset movements counter for each iteration
+
+        for (int i = 0; i < points_n; i++) {
+            min_energy = INT_MAX; // Initialize min_energy to a large value
+
+            for (int j = 0; j < neighbours_size; j++) {
                 current_x[i] = x_points[i] + window[j][0];
                 current_y[i] = y_points[i] + window[j][1];
-                if(current_x[i] < sobel_energy.mat.rows   && current_x[i] > 0 && current_y[i] > 0 && current_y[i] < sobel_energy.mat.cols){
-                    // point_energy = sobel_energy.mat.at<uchar>(current_x[i],current_y[i]) * -1 * gamma;
-                    point_energy = sobel_energy.mat.at<uchar>(current_x[i],current_y[i]) * -1 * gamma + internal_energy(current_x, current_y,points_n, alpha, beta);
-                    // std::cout<< point_energy<<"$$";
-                    if(j==0){
+
+                if (current_x[i] < sobel_energy.mat.rows && current_x[i] > 0 && current_y[i] > 0 && current_y[i] < sobel_energy.mat.cols) {
+                    point_energy = sobel_energy.mat.at<uchar>(current_x[i], current_y[i]) * -1 * gamma + internal_energy(current_x, current_y, points_n, alpha, beta);
+
+                    if (point_energy < min_energy) {
                         min_energy = point_energy;
                         min_index = j;
                     }
-                    else{
-                        if(point_energy < min_energy){
-                            min_energy = point_energy;
-                            min_index = j;
-                        }
-                    }
                 }
             }
-            x_points[i] = x_points[i] + window[min_index][0];
-            y_points[i] = y_points[i] + window[min_index][1];
-            if(window[min_index][0] != 0 || window[min_index][1] != 0){
-                movements++;
+
+            // Update the contour point if a better point was found
+            if (min_energy < INT_MAX) {
+                x_points[i] = x_points[i] + window[min_index][0];
+                y_points[i] = y_points[i] + window[min_index][1];
+
+                if (window[min_index][0] != 0 || window[min_index][1] != 0) {
+                    movements++;
+                }
             }
         }
+
         iteration++;
-        if(plot == true){
+
+        if (plot == true) {
             plot_img = source.mat.clone();
             draw_contour(plot_img, points_n, x_points, y_points);
             cv::imshow("Active Contour", plot_img);
             cv::waitKey(10);
-
         }
 
-        if(iteration > iterations || movements < threshold){
+        if (iteration > iterations || movements < threshold) {
             loob = false;
             cv::waitKey(0);
         }
     }
+
     return plot_img;
 }
+
 
 cvector<cvector<int>> window_neighbours(int size)
 {

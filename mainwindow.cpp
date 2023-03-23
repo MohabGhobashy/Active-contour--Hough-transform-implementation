@@ -80,11 +80,11 @@ void MainWindow::on_submitBtn_clicked()
         circleDetection(img1.getOutputImg());
         showImg(img1.getOutputImg(), ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
-
+    else{
         string path = imgPath.toStdString();
         Mat image =imread(path, IMREAD_GRAYSCALE);
         Mat result = houghLine(image);
-        showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
+        showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());}
 }
 
 
@@ -92,12 +92,12 @@ void MainWindow::on_submitBtn_2_clicked()
 {
     string path = imgPath.toStdString();
     Image original_image = Image(path);
-    int points = 150;
+    int points = 80;
     Size sz = original_image.mat.size();
     int x_cooridinates[points];
     int y_cooridinates[points];
-    circle_contour(Point(sz.width / 2, sz.height / 2), 180, points, x_cooridinates, y_cooridinates);
-    Mat output=greedy_contour(original_image, 10, 1, 1.5, 20, x_cooridinates, y_cooridinates, points, 7, true);
+    circle_contour(Point(sz.width / 2, sz.height / 2-40),100, points, x_cooridinates, y_cooridinates);
+    Mat output=greedy_contour(original_image, 50, 1, 2,5, x_cooridinates, y_cooridinates, points,11, true);
     showImg(output, ui->outputImg_2, QImage::Format_RGB888, ui->outputImg_2->width(), ui->outputImg_2->height());
 
 }
