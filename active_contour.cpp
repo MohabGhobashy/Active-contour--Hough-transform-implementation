@@ -97,11 +97,16 @@ img::Image external_energy(img::Image source)
     img::Image filtered_Gaussian = img::noise_filter(source, 3, "Gaussian");
     img::Image gray = img::convert(filtered_Gaussian, "bgr", "gray");
     // cv::Sobel(gray.mat,gray.mat,CV_8UC1,1,1);
-    return img::Image(img::scale(img::sobel(gray, 1, 1)), gray.mat.rows - 2, gray.mat.rows - 2, CV_8UC1);
+
+    cv::Canny(gray.mat, gray.mat, 0, 255);
+//    cv::imshow("gray", gray.mat);
+//    cv::waitKey(0);
+    return img::Image(gray);
+
     // return gray;
 }
 
-void greedy_contour(img::Image source, int iterations ,int alpha, int beta, int gamma,int* x_points, int* y_points, int points_n, int window_size, bool plot){
+cv::Mat greedy_contour(img::Image source, int iterations ,float alpha, float beta, float gamma,int* x_points, int* y_points, int points_n, int window_size, bool plot){
     img::Image sobel_energy = external_energy(source);
     cvector<cvector<int>> window = window_neighbours(window_size);
     int current_x[180];
@@ -150,6 +155,7 @@ void greedy_contour(img::Image source, int iterations ,int alpha, int beta, int 
             draw_contour(plot_img, points_n, x_points, y_points);
             cv::imshow("Active Contour", plot_img);
             cv::waitKey(10);
+
         }
 
         if(iteration > iterations || movements < threshold){
@@ -157,6 +163,7 @@ void greedy_contour(img::Image source, int iterations ,int alpha, int beta, int 
             cv::waitKey(0);
         }
     }
+    return plot_img;
 }
 
 cvector<cvector<int>> window_neighbours(int size)
