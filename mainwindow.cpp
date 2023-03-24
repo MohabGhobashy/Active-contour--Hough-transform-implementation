@@ -101,8 +101,7 @@ void MainWindow::on_submitBtn_2_clicked()
     int x_cooridinates[points];
     int y_cooridinates[points];
     circle_contour(Point(sz.width / 2, sz.height / 2-40),100, points, x_cooridinates, y_cooridinates);
-    Mat output=greedy_contour(original_image, 50, 1, 2,5, x_cooridinates, y_cooridinates, points,11, true);
+    Mat output = greedy_contour(original_image, 50, 1, 2,5, x_cooridinates, y_cooridinates, points,3, true);
     showImg(output, ui->outputImg_2, QImage::Format_RGB888, ui->outputImg_2->width(), ui->outputImg_2->height());
-
 }
 

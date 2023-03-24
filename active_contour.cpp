@@ -1,5 +1,11 @@
 #include <opencv2/opencv.hpp>
 #include "active_contour.hpp"
+#include <QDebug>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
 
 void circle_contour(cv::Point center, double radius, int numberOfPoints, int *x_coordinates, int *y_coordinates)
 {
@@ -129,6 +135,8 @@ cv::Mat greedy_contour(img::Image source, int iterations, float alpha, float bet
     int current_x[180];
     int current_y[180];
 
+
+
     cv::Mat plot_img;
     int point_energy;
     int min_energy;
@@ -148,6 +156,8 @@ cv::Mat greedy_contour(img::Image source, int iterations, float alpha, float bet
             for (int j = 0; j < neighbours_size; j++) {
                 current_x[i] = x_points[i] + window[j][0];
                 current_y[i] = y_points[i] + window[j][1];
+
+
 
                 if (current_x[i] < sobel_energy.mat.rows && current_x[i] > 0 && current_y[i] > 0 && current_y[i] < sobel_energy.mat.cols) {
                     point_energy = sobel_energy.mat.at<uchar>(current_x[i], current_y[i]) * -1 * gamma + internal_energy(current_x, current_y, points_n, alpha, beta);
@@ -181,6 +191,70 @@ cv::Mat greedy_contour(img::Image source, int iterations, float alpha, float bet
 
         if (iteration > iterations || movements < threshold) {
             loob = false;
+            vector<int> chainCode;
+            for (int i = 0; i < points_n - 1; i++)
+            {
+                int dx = x_points[i + 1] - x_points[i];
+                int dy = y_points[i + 1] - y_points[i];
+
+                double slope = (double)dy / (double)dx;
+                double angle = atan(slope);
+                angle = abs(angle * 180 / 3.14);
+
+                // Calculate the quadrant
+                int quadrant;
+                if (dx > 0 && dy >= 0) {
+                    quadrant = 1;
+                }
+                else if (dx <= 0 && dy > 0) {
+                    quadrant = 2;
+                    angle = 180 - angle;
+                }
+                else if (dx < 0 && dy <= 0) {
+                    quadrant = 3;
+                    angle = 180 + angle;
+
+                }
+                else if (dx >= 0 && dy < 0) {
+                    quadrant = 4;
+                    angle = 360 - angle;
+                }
+                cout << angle << endl;
+                // Calculate the chaincode for the quadrant
+                int code;
+                if (angle >= 337.5 || angle < 22.5) {
+                    code = 0;
+                }
+                else if (angle >= 22.5 && angle < 67.5) {
+                    code = 1;
+                }
+                else if (angle >= 67.5 && angle < 112.5) {
+                    code = 2;
+                }
+                else if (angle >= 112.5 && angle < 157.5) {
+                    code = 3;
+                }
+                else if (angle >= 157.5 && angle < 202.5) {
+                    code = 4;
+                }
+                else if (angle >= 202.5 && angle < 247.5) {
+                    code = 5;
+                }
+                else if (angle >= 247.5 && angle < 292.5) {
+                    code = 6;
+                }
+                else if (angle >= 292.5 && angle < 337.5) {
+                    code = 7;
+                }
+                // Add the chaincode to the sequence
+                chainCode.push_back(code);
+            }
+
+            for (int i = 0; i < points_n-1; i++)
+            {
+                qDebug()<<"P"<<i<<": "<<chainCode[i];
+            }
+
             cv::waitKey(0);
         }
     }
