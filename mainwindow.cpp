@@ -90,11 +90,14 @@ void MainWindow::on_submitBtn_clicked()
         showImg(output, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
 
-    else{
+    else if(ui->typeComboBox->currentText() == "line"){
         string path = imgPath.toStdString();
-        Mat image =imread(path, IMREAD_GRAYSCALE);
-        Mat result = houghLine(image);
-        showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());}
+        img1.reset();
+
+//        Mat image =imread(path, IMREAD_GRAYSCALE);
+        Mat result = houghLine(img1.getOutputImg());
+        showImg(result, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
+    }
 }
 
 

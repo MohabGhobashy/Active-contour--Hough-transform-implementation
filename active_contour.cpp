@@ -254,12 +254,11 @@ cv::Mat greedy_contour(img::Image source, int iterations, float alpha, float bet
             {
                 qDebug()<<"P"<<i<<": "<<chainCode[i];
             }
-
+            return plot_img;
             cv::waitKey(0);
         }
     }
 
-    return plot_img;
 }
 
 
