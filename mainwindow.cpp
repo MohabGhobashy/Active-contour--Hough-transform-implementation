@@ -47,7 +47,7 @@ void MainWindow::showImg(Mat& img, QLabel* imgLbl, enum QImage::Format imgFormat
 {
     QImage image((uchar*)img.data, img.cols, img.rows, imgFormat);
     QPixmap pix = QPixmap::fromImage(image);
-    imgLbl->resize(img.rows, img.cols);
+//    imgLbl->resize(img.rows, img.cols);
     imgLbl->setPixmap(pix.scaled(width, hieght, Qt::KeepAspectRatio));
 //    imgLbl->setScaledContents(true);
 }
@@ -70,7 +70,7 @@ void MainWindow::on_actionUpload_triggered()
     showImg(image, ui->originalImg, QImage::Format_RGB888, ui->originalImg->width(), ui->originalImg->height());
      ui->outputImg->clear();
     // tab 2
-     showImg(image, ui->originalImg_2, QImage::Format_RGB888, ui->originalImg_2->width(), ui->originalImg_2->height());
+     showImg(image, ui->originalImg_2, QImage::Format_RGB888, ui->originalImg->width(), ui->originalImg->height());
 
 
 
@@ -79,18 +79,18 @@ void MainWindow::on_actionUpload_triggered()
 
 void MainWindow::on_submitBtn_clicked()
 {
-    if(ui->typeComboBox->currentText() == "circle"){
+    if(ui->typeComboBox->currentText() == "Circle"){
         img1.reset();
         circleDetection(img1.getOutputImg());
         showImg(img1.getOutputImg(), ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
 
-    else if (ui->typeComboBox->currentText() == "elipse"){
+    else if (ui->typeComboBox->currentText() == "Ellipse"){
         Mat output = EllipseDetectionImplemented(img1.getOutputImg());
         showImg(output, ui->outputImg, QImage::Format_RGB888, ui->outputImg->width(), ui->outputImg->height());
     }
 
-    else if(ui->typeComboBox->currentText() == "line"){
+    else if(ui->typeComboBox->currentText() == "Line"){
         string path = imgPath.toStdString();
         img1.reset();
 
