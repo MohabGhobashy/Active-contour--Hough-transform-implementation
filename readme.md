@@ -18,7 +18,7 @@ It is a desktop application that allows users to do some image processing.
 ## Features 
 - User can browse images from his pc to do image processing.
 - The project contains 2 tabs:
-  - User can either detect all the lines , Circles or Ellipses in any picture mainly based on Hough Algorithms .
+  - User can either detect all the Lines , Circles or Ellipses in any picture mainly based on Hough Algorithms .
   - User is able to add a contour surrounding the objects in the photo which is mainly based on snake contour method and representing it in 8-chain code
 ## Technology Used:
 The Desktop Application is built using:
