@@ -13,19 +13,14 @@
 - You can also follow the steps in this [video](https://www.youtube.com/watch?v=ZOSu-2Oju-A) 
 
 ## Description 
-It is a desktop application that allows users to do image processing.
+It is a desktop application that allows users to do some advanced image processing.
 
 ## Features 
 - User can browse images from his pc to do image processing.
-- The project contains 7 tabs:
-  - User can add Uniform, Gaussian and salt & pepper noise to the uploaded image and also can apply Average, Gaussian and median filters.
-  - User is able to apply Sobel , Roberts , Prewitt and Canny edge detectors. 
-  - User can check the histogram and distribution curve of the uploaded picture.
-  - User can normalize and equalize the image.
-  - User is capable of applying local and global thresholding.
-  - User could transform an image from RGB to gray scale image and plot of R, G, and B histograms with its distribution function.
-  - User can apply two types of frequency domain filters (low pass filter & high pass filter) and can merge two images after applying different filters on them. 
-
+- The project contains 2 tabs:
+  - User can either detect all the lines , Circles , Ellipses in any picture mainly based on Hough Algorithms .
+  - User is able to add a countour surronding the objects in the photo which is mainly based on snake contour method and representing 
+    it in 8-chain code
 ## Technology Used:
 The Desktop Application is built using:
 - Qt6 Creator using C++ .
