@@ -122,7 +122,7 @@ QTabBar::tab:right:selected {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -462,7 +462,7 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
