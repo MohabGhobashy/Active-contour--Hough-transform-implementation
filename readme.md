@@ -27,8 +27,7 @@ The Desktop Application is built using:
 
 ## Project Demo
 
-## Screenshots
-![salt and paper image](https://user-images.githubusercontent.com/90320433/224530590-ca572c27-689d-4066-9de3-8bdbaafbb98e.png)
+## Screenshots![imagge](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
 ![edge detection](https://user-images.githubusercontent.com/90320433/224530559-01d8f438-1031-4fa3-88c6-387cf8961ee5.png)
 ![Histogram and Distribution Curves](https://user-images.githubusercontent.com/90320433/224530574-4025c457-e8b8-402b-b799-e8e140bb26c7.png)
 ![hist equalize and normalize](https://user-images.githubusercontent.com/90320433/224530570-0ddda7cf-32b7-4844-97b8-f458250f308f.png)
