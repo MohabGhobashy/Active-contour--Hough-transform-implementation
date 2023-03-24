@@ -26,7 +26,8 @@ The Desktop Application is built using:
 
 ## Project Demo
 
-## Screenshots![HoughLineAlgo](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
+## Screenshots
+![HoughLineAlgo](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
 ![HoughCircleAlgo](https://user-images.githubusercontent.com/90320420/227646363-c224b187-9dc0-41ed-b250-3645cdee4827.jpg)
 ![SnackContour](https://user-images.githubusercontent.com/90320420/227645983-52ab0931-6275-4341-8052-6bd6bda3adb3.jpeg)
 
