@@ -100,36 +100,8 @@ void MainWindow::on_submitBtn_2_clicked()
     Size sz = original_image.mat.size();
     int x_cooridinates[points];
     int y_cooridinates[points];
-    circle_contour(Point(sz.width / 2-20, sz.height / 2-20),70, points, x_cooridinates, y_cooridinates);
-    Mat output=greedy_contour(original_image, 100, 1, 2,5, x_cooridinates, y_cooridinates, points,3, true);
-//    int n = sizeof(x_cooridinates) / sizeof(int);
-
-//    vector<int> code = chainCode(x_cooridinates, y_cooridinates, n);
-//    std::vector<int> code = get_8_chain_code(x_cooridinates, y_cooridinates, 80);
-    int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
-    int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
-    int n = sizeof(x_cooridinates) / sizeof(int);
-        int *code = new int[n-1];
-        for (int i = 1; i < n; i++) {
-            // Determine the direction of movement
-            int dxn = x_cooridinates[i] - x_cooridinates[i-1];
-            int dyn = y_cooridinates[i] - y_cooridinates[i-1];
-            int direction = -1;
-            for (int j = 0; j < 8; j++) {
-                if (dx[j] == dxn && dy[j] == dyn) {
-                    direction = j;
-                    break;
-                }
-            }
-            code[i-1] = direction;
-        }
-        for (int i = 0; i < n-1; i++) {
-            qDebug() << "(" << dx[code[i]] << ", " << dy[code[i]] << ") ";
-        }
-
-    // Only consider the first contour (assumes there is only one contour in the image)
-
+    circle_contour(Point(sz.width / 2, sz.height / 2-40),100, points, x_cooridinates, y_cooridinates);
+    Mat output = greedy_contour(original_image, 50, 1, 2,5, x_cooridinates, y_cooridinates, points,3, true);
     showImg(output, ui->outputImg_2, QImage::Format_RGB888, ui->outputImg_2->width(), ui->outputImg_2->height());
-
 }
 
