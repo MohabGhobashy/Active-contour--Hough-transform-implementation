@@ -152,3 +152,145 @@ void drawCirles(vector<vector<vector<int>>>& accumulator, Mat& img, int min_radi
         }
     }
 }
+
+/////////////////////////////////////// Hough Ellipse ////////////////////////////////////////////////////////////
+
+
+Mat EllipseDetectionImplemented(Mat img){
+
+    resize(img, img, cv::Size(256, 256));
+    Mat output_image = img;
+
+    // Apply Canny on image
+    Mat Cannyimage;
+    Canny(img, Cannyimage, 130, 150);
+
+    // push edge pixels in array for optimization
+    int rows = Cannyimage.rows;
+    int cols = Cannyimage.cols;
+    vector <Point> edge_points;
+    for (int x = 0; x < rows; x++){
+        for (int y = 0; y < cols; y++){
+            if (Cannyimage.at<uchar>(x, y) > 0){
+                edge_points.push_back(Point(x,y));
+            }
+        }
+    }
+
+    vector<std::thread> vecOfThreads;
+
+    int step = floor(edge_points.size()/30);
+    int startY = 0, endY = step;
+
+//  use miltie cores of processor to speed up the itterations
+    for(int i=0; i<30; i++){
+        vecOfThreads.push_back(std::thread(setEllipseAcc, std::ref(output_image), std::ref(edge_points), startY, endY));
+        startY += step;
+        endY += step;
+    }
+
+    for (std::thread & th : vecOfThreads){
+        // If thread Object is Joinable then Join that thread.
+        if (th.joinable())
+            th.join();
+    }
+    vecOfThreads.clear();
+
+    return output_image;
+}
+
+
+void setEllipseAcc(Mat& output_image, vector<Point>& edge_points, int start,int end){
+
+    // parameters
+    float max_b_squared = round( 0.5 * 256);
+    max_b_squared = max_b_squared * max_b_squared;
+    float min_size = 4.0;
+    int vote_threshold = 7;
+    int p1, p2, p3, p1x, p1y, p2x, p2y, p3x, p3y;
+    float xc, yc, a, b, d, k, dx, dy;
+    float cos_tau_squared, b_squared, orientation;
+    vector<float> acc;
+
+    // take a pair of 2 points and assume they make the major axis of the ellipse
+    for (p1=start; p1<end;p1++){
+        p1x = edge_points[p1].x;
+        p1y = edge_points[p1].y;
+
+        for (p2=0; p2<p1; p2++){
+            p2x = edge_points[p2].x;
+            p2y = edge_points[p2].y;
+
+            dx = p1x - p2x;
+            dy = p1y - p2y;
+            a = 0.5 * sqrt(dx * dx + dy * dy);
+
+            if (a > 0.5 * min_size){
+                xc = 0.5 * (p1x + p2x);
+                yc = 0.5 * (p1y + p2y);
+
+                // use every edge pixel to vote for the minor axis
+                for (p3=0; p3<edge_points.size(); p3++){
+                    p3x = edge_points[p3].x;
+                    p3y = edge_points[p3].y;
+                    dx = p3x - xc;
+                    dy = p3y - yc;
+                    d = sqrt(dx * dx + dy * dy);
+
+                    if ( d > min_size && d <= a){
+                        dx = p3x - p1x;
+                        dy = p3y - p1y;
+                        cos_tau_squared = ((a*a + d*d - dx*dx - dy*dy) / (2 * a * d));
+                        cos_tau_squared = cos_tau_squared * cos_tau_squared;
+                        k = a*a - d*d * cos_tau_squared;
+
+                        if ( k>0 && cos_tau_squared<1){
+                            b_squared = a*a * d*d * (1 - cos_tau_squared) / k;
+                            if (b_squared <= max_b_squared){
+                                acc.push_back(b_squared);
+                            }
+                        }
+                    }
+                }
+
+                if (acc.size() > 0){
+
+                    // get the most repeated minor axis value
+                    for (int z = 0; z < acc.size(); z++){
+                        acc.at(z) = round(acc.at(z));
+                    }
+
+                    int max_vote = 0;
+                    float minor_axis;
+                    for (int m=0 ; m<acc.size(); m++){
+                        int counter = (int)count(acc.begin(), acc.end(), acc[m]);
+                        if (counter > max_vote)
+                        {
+                            max_vote = counter;
+                            minor_axis = acc.at(m);
+                        }
+                    }
+
+                    // check if number of votes is above threshold
+                    if (max_vote > vote_threshold){
+                        orientation = atan2(p1x - p2x, p1y - p2y);
+                        b = sqrt(minor_axis);
+
+                        if (orientation != 0){
+                            orientation = M_PI - orientation;
+                            if (orientation > M_PI){
+                                orientation = orientation - M_PI / 2.0 ;
+                                a, b = b, a;
+                            }
+                        }
+                        Point center(xc, yc);
+                        Size axis(a, b);
+                        cv::ellipse(output_image, center, axis, orientation, 0,360, cv::Scalar(255, 0, 0), 1);
+                        acc.clear();
+                    }
+                }
+            }
+        }
+    }
+}
+
