@@ -94,14 +94,66 @@ void MainWindow::on_submitBtn_clicked()
 
 void MainWindow::on_submitBtn_2_clicked()
 {
+    QChar name;
+    int centerX,window_size,points,iterations,radius;
+    int centerY;
     string path = imgPath.toStdString();
+    for(int i=0;i<imgPath.size();i++){
+        if(imgPath[i]=='.'){
+            name= imgPath[i-1];
+        }
+    }
+    qDebug() << "The value of myChar is:" << name;
+    if(name=='A'){
+
+    centerX=40;
+    centerY=0;
+
+    points = 80;
+    radius=100;
+    window_size=11;
+    iterations=50;
+    qDebug()<<"suii";
+    }
+    if(name=='B'){
+        centerX=40;
+        centerY=0;
+        points = 80;
+        radius=60;
+        window_size=11;
+        iterations=40;
+
+
+    }
+
+    if(name=='C'){
+        centerX=20;
+        centerY=20;
+
+        points = 100;
+        radius=70;
+        window_size=3;
+        iterations=100;
+
+
+    }
+
+
     Image original_image = Image(path);
-    int points = 100;
+
     Size sz = original_image.mat.size();
     int x_cooridinates[points];
     int y_cooridinates[points];
-    circle_contour(Point(sz.width / 2, sz.height / 2-40),100, points, x_cooridinates, y_cooridinates);
-    Mat output = greedy_contour(original_image, 50, 1, 2,5, x_cooridinates, y_cooridinates, points,3, true);
+    circle_contour(Point(sz.width / 2-centerY, sz.height /2 -(centerX)),radius, points, x_cooridinates, y_cooridinates);
+    Mat output = greedy_contour(original_image, iterations, 1, 2,5, x_cooridinates, y_cooridinates, points,window_size, true);
+    cv::resize(output, output, cv::Size(360, round(360*output.rows/output.cols)));
+    int perimeter=contour_perimeter(x_cooridinates,y_cooridinates,points);
+    int Area=contour_area(points,x_cooridinates,y_cooridinates);
+    ui->Area->display(Area);
+    ui->premetier->display(perimeter);
+
+
+//    lcd->setDigitCount(5);
     showImg(output, ui->outputImg_2, QImage::Format_RGB888, ui->outputImg_2->width(), ui->outputImg_2->height());
 }
 

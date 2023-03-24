@@ -453,6 +453,92 @@ QPushButton::menu-indicator:pressed, QPushButton::menu-indicator:open {
        </item>
       </layout>
      </widget>
+     <widget class="QLCDNumber" name="Area">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>390</y>
+        <width>64</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLCDNumber {
+    color: #FFCC00; /* Text color */
+    background-color: #333; /* Background color */
+    border: 1px solid #FFCC00; /* Border style */
+    border-radius: 5px; /* Border radius */
+}
+
+QLCDNumber::segment {
+    background-color: #FFCC00; /* Segment color */
+}
+
+QLCDNumber::small {
+    font-size: 10pt; /* Small digit size */
+}
+
+QLCDNumber::large {
+    font-size: 20pt; /* Large digit size */
+}</string>
+      </property>
+     </widget>
+     <widget class="QLCDNumber" name="premetier">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>430</y>
+        <width>64</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLCDNumber {
+    color: #FFCC00; /* Text color */
+    background-color: #333; /* Background color */
+    border: 1px solid #FFCC00; /* Border style */
+    border-radius: 5px; /* Border radius */
+}
+
+QLCDNumber::segment {
+    background-color: #FFCC00; /* Segment color */
+}
+
+QLCDNumber::small {
+    font-size: 10pt; /* Small digit size */
+}
+
+QLCDNumber::large {
+    font-size: 20pt; /* Large digit size */
+}</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>610</x>
+        <y>390</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Area</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>602</x>
+        <y>430</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>premeiter</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

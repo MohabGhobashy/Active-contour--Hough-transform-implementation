@@ -281,73 +281,7 @@ cvector<cvector<int>> window_neighbours(int size)
 }
 
 
-//std::vector<int> chainCode(int* x_points, int* y_points, int points_n) {
-//    // Initialize the direction vectors
-//    int dirX[8] = { 1, 1, 0, -1, -1, -1, 0, 1 };
-//    int dirY[8] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
-//    // Initialize the starting point and the current direction
-//    int startX = x_points[0];
-//    int startY = y_points[0];
-//    int currX = startX;
-//    int currY = startY;
-//    int currDir = 0;
-
-//    // Initialize the 8 chain code representation
-//    std::vector<int> code;
-
-//    // Traverse the contour points and compute the 8 chain code
-//    for (int i = 1; i < points_n; i++) {
-//        // Compute the next direction
-//        int nextDir = -1;
-//        int diffX = x_points[i] - currX;
-//        int diffY = y_points[i] - currY;
-//        for (int j = 0; j < 8; j++) {
-//            if (dirX[j] == diffX && dirY[j] == diffY) {
-//                nextDir = j;
-//                break;
-//            }
-//        }
-
-//        // Update the current direction and position
-//        currDir = nextDir;
-//        currX = x_points[i];
-//        currY = y_points[i];
-
-//        // Add the current direction to the 8 chain code representation
-//        code.push_back(currDir);
-//    }
-
-//    // Return the 8 chain code representation
-//    return code;
-//}
-//std::vector<int> get_8_chain_code(int* x_points, int* y_points, int points_n) {
-//    // Convert the contour points to 8 chain code representation
-//    std::vector<int> code = chainCode(x_points, y_points, points_n);
-
-//    // Convert the 4 chain code representation to 8 chain code representation
-//    std::vector<int> code_8;
-//    for (int i = 0; i < code.size(); i++) {
-//        int prev = code[(i + code.size() - 1) % code.size()];
-//        int curr = code[i];
-
-//        if (curr == (prev + 1) % 4) {
-//            code_8.push_back(0);
-//        }
-//        else if (curr == (prev + 3) % 4) {
-//            code_8.push_back(4);
-//        }
-//        else if (curr == prev) {
-//            code_8.push_back(8);
-//        }
-//        else {
-//            code_8.push_back(2 * ((prev + curr) % 4) + 1);
-//        }
-//    }
-
-//    // Return the 8 chain code representation
-//    return code_8;
-//}
 std::vector<std::pair<int, int>> chain_code(std::vector<int> x, std::vector<int> y) {
     int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
     int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
