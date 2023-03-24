@@ -146,9 +146,7 @@ void drawCirles(vector<vector<vector<int>>>& accumulator, Mat& img, int min_radi
         for (int x = 0; x < cols; x++) {
             for (int r = min_radius; r <= max_radius; r++) {
                 if (accumulator[y][x][r - min_radius] > accumulator_threshold){
-                    qDebug()<<"gg";
                     circle(img, Point(x, y), r, Scalar(0, 255, 0), 2);
-                    qDebug()<<"ez";
                 }
             }
         }
