@@ -27,8 +27,8 @@ The Desktop Application is built using:
 
 ## Project Demo
 
-## Screenshots![imagge](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
-![edge detection](https://user-images.githubusercontent.com/90320433/224530559-01d8f438-1031-4fa3-88c6-387cf8961ee5.png)
+## Screenshots![HoughLineAlgo](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
+![HougCircleAlgo](https://user-images.githubusercontent.com/90320420/227645983-52ab0931-6275-4341-8052-6bd6bda3adb3.jpeg)
 ![Histogram and Distribution Curves](https://user-images.githubusercontent.com/90320433/224530574-4025c457-e8b8-402b-b799-e8e140bb26c7.png)
 ![hist equalize and normalize](https://user-images.githubusercontent.com/90320433/224530570-0ddda7cf-32b7-4844-97b8-f458250f308f.png)
 ![thresholding](https://user-images.githubusercontent.com/90320433/224530594-ae083272-f9da-4368-b42e-8136506a50da.png)
