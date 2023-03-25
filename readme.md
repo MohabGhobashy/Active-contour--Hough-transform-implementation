@@ -25,11 +25,20 @@ The Desktop Application is built using:
 - Qt6 Creator using C++ .
 
 ## Project Demo
+https://user-images.githubusercontent.com/93479326/227706670-d4bdea43-8414-4163-9bab-d0b7ea571a57.mp4
 
 ## Screenshots
-![HoughLineAlgo](https://user-images.githubusercontent.com/90320420/227644567-f443d49c-4005-4e0f-95e5-a96b9fe18103.png)
-![HoughCircleAlgo](https://user-images.githubusercontent.com/90320420/227646363-c224b187-9dc0-41ed-b250-3645cdee4827.jpg)
-![SnackContour](https://user-images.githubusercontent.com/90320420/227645983-52ab0931-6275-4341-8052-6bd6bda3adb3.jpeg)
+![HoughLineAlgo](https://user-images.githubusercontent.com/93479326/227706542-4f433387-3cc7-4526-871c-ed9f650bcad9.png)
+
+
+![HoughCircleAlgo](https://user-images.githubusercontent.com/93479326/227706553-61cde923-6eba-4393-8452-289944ed3ac0.png)
+
+
+![SnackContour](https://user-images.githubusercontent.com/93479326/227706564-ed8123a8-fb6e-4cf9-9349-58dce2b397b4.png)
+
+
+
+
 
 
 ## Made by:
